@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LAVANDUS S.A. | Sistema de Lavado Industrial</title>
+    <style>
+        :root {
+            --primary: #005691;
+            --primary-dark: #00375c;
+            --secondary: #00a8cc;
+            --bg: #f4f7f9;
+            --surface: #ffffff;
+            --text: #2c3e50;
+            --border: #dcdfe3;
+            --success: #27ae60;
+            --warning: #f39c12;
+        }
+        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        body { margin: 0; background-color: var(--bg); color: var(--text); }
+        header { background: var(--primary); color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        header h1 { margin: 0; font-size: 1.4rem; letter-spacing: 0.5px; }
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+        .card { background: var(--surface); border-radius: 8px; border: 1px solid var(--border); padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .hidden { display: none !important; }
+        .form-group { margin-bottom: 1rem; }
+        label { display: block; font-weight: 600; margin-bottom: 0.4rem; font-size: 0.9rem; }
+        input, select { width: 100%; padding: 0.7rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.95rem; }
+        button { background: var(--primary); color: white; border: none; border-radius: 6px; padding: 0.75rem 1.4rem; font-weight: bold; cursor: pointer; transition: 0.2s ease; }
+        button:hover { background: var(--primary-dark); }
+        .grid-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th, td { text-align: left; padding: 0.9rem; border-bottom: 1px solid var(--border); }
+        th { background: #f8fafc; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; }
+        .badge { display: inline-block; padding: 0.25rem 0.6rem; border-radius: 12px; font-size: 0.75rem; font-weight: bold; }
+        .badge-reg { background: #e3f2fd; color: #1565c0; }
+        .badge-lav { background: #fff3e0; color: #e65100; }
+        .badge-sec { background: #e8f5e9; color: #2e7d32; }
+        .btn-action { background: var(--secondary); font-size: 0.8rem; padding: 0.4rem 0.8rem; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>LAVANDUS S.A. &mdash; Portal Operativo y Clientes</h1>
+    <div id="user-info"></div>
+</header>
+
+<div class="container">
+    <!-- MÓDULO DE LOGIN (SPRINT 0) -->
+    <div id="login-section" class="card" style="max-width: 420px; margin: 3rem auto;">
+        <h2 style="margin-top: 0; color: var(--primary);">Acceso al Sistema</h2>
+        <p style="font-size: 0.85rem; color: #666;">Ingrese sus credenciales corporativas o de cliente.</p>
+        <div class="form-group">
+            <label>Correo Electrónico</label>
+            <input type="email" id="login-user" value="admin@lavandus.com">
+        </div>
+        <div class="form-group">
+            <label>Contraseña</label>
+            <input type="password" id="login-pass" value="Admin123*">
+        </div>
+        <button id="btn-login" style="width: 100%;">Iniciar Sesión</button>
+        <p id="login-error" style="color: red; font-size: 0.85rem; margin-top: 0.8rem; display: none;"></p>
+    </div>
+
+    <!-- MÓDULO PRINCIPAL (SPRINT 1 MVP) -->
+    <div id="main-section" class="hidden">
+        <!-- Formulario de Nueva Solicitud -->
+        <div class="card">
+            <h3 style="margin-top:0; color: var(--primary);">Registrar Solicitud de Lavado Industrial (LAV-01)</h3>
+            <form id="form-solicitud">
+                <div class="grid-form">
+                    <div class="form-group">
+                        <label>Cliente Corporativo / Razón Social</label>
+                        <input type="text" id="razon-social" required placeholder="Ej. Hotel Sheraton Cordoba">
+                    </div>
+                    <div class="form-group">
+                        <label>Kilos Estimados (Mínimo 50 kg)</label>
+                        <input type="number" id="kilos" min="50" required placeholder="Ej. 250">
+                    </div>
+                    <div class="form-group">
+                        <label>Categoría de Prenda</label>
+                        <select id="tipo-prenda">
+                            <option value="Hoteleria">Hotelería (Sábanas, Toallas, Manteles)</option>
+                            <option value="Hospitalario">Hospitalario (Aislamiento y Quirúrgico)</option>
+                            <option value="Industrial">Indumentaria Industrial de Planta</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha de Retiro Programado</label>
+                        <input type="date" id="fecha-retiro" required>
+                    </div>
+                </div>
+                <button type="submit" style="margin-top: 0.5rem;">Confirmar y Transmitir Solicitud</button>
+            </form>
+        </div>
+
+        <!-- Tabla de Órdenes y Monitoreo de Estados -->
+        <div class="card">
+            <h3 style="margin-top:0; color: var(--primary);">Panel de Trazabilidad y Procesamiento en Planta (LAV-03)</h3>
+            <table>
+                <thead>
+                <tr>
+                    <th>N° Orden</th>
+                    <th>Cliente</th>
+                    <th>Kilos</th>
+                    <th>Categoría</th>
+                    <th>Fecha Retiro</th>
+                    <th>Total Liquidado</th>
+                    <th>Estado Actual</th>
+                    <th>Acción de Operaciones</th>
+                </tr>
+                </thead>
+                <tbody id="tabla-solicitudes">
+                <!-- Filas renderizadas dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    const API_URL = "/api";
+    let currentUser = null;
+
+    // Login Interactivo
+    document.getElementById('btn-login').addEventListener('click', async () => {
+        const u = document.getElementById('login-user').value;
+        const p = document.getElementById('login-pass').value;
+        try {
+            const res = await fetch(`${API_URL}/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: u, password: p })
+            });
+            if (!res.ok) throw new Error("Credenciales inválidas");
+            currentUser = await res.json();
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('main-section').classList.remove('hidden');
+            document.getElementById('user-info').innerHTML = `<span><strong>${currentUser.nombre}</strong> (${currentUser.role})</span>`;
+            cargarSolicitudes();
+        } catch (err) {
+            const errP = document.getElementById('login-error');
+            errP.textContent = err.message;
+            errP.style.display = 'block';
+        }
+    });
+
+    // Cargar Lista de Solicitudes
+    async function cargarSolicitudes() {
+        try {
+            const res = await fetch(`${API_URL}/solicitudes`);
+            const datos = await res.json();
+            const tbody = document.getElementById('tabla-solicitudes');
+            tbody.innerHTML = '';
+            datos.forEach(s => {
+                const badgeClass = s.estado === 'Registrada' ? 'badge-reg' : (s.estado === 'En Lavado' ? 'badge-lav' : 'badge-sec');
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>#${s.id}</strong></td>
+                        <td>${s.razonSocialCliente}</td>
+                        <td>${s.kilosEstimados} kg</td>
+                        <td>${s.tipoPrenda}</td>
+                        <td>${s.fechaRecoleccion}</td>
+                        <td>$ ${s.totalLiquidado.toLocaleString('es-AR')}</td>
+                        <td><span class="badge ${badgeClass}">${s.estado}</span></td>
+                        <td>
+                            ${s.estado !== 'Entregada y Facturada' ?
+                    `<button class="btn-action" onclick="avanzarEstado(${s.id})">Avanzar Etapa &rarr;</button>` :
+                    `<span style="color:gray; font-size:0.8rem;">Completada</span>`}
+                        </td>
+                    </tr>
+                `;
+            });
+        } catch (e) {
+            console.error("Error al obtener solicitudes:", e);
+        }
+    }
+
+    // Registrar Nueva Solicitud
+    document.getElementById('form-solicitud').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const payload = {
+            razonSocialCliente: document.getElementById('razon-social').value,
+            kilosEstimados: parseFloat(document.getElementById('kilos').value),
+            tipoPrenda: document.getElementById('tipo-prenda').value,
+            fechaRecoleccion: document.getElementById('fecha-retiro').value
+        };
+
+        const res = await fetch(`${API_URL}/solicitudes`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+            document.getElementById('form-solicitud').reset();
+            cargarSolicitudes();
+        } else {
+            const errorData = await res.json();
+            alert("Error: " + errorData.error);
+        }
+    });
+
+    // Avanzar Etapa
+    async function avanzarEstado(id) {
+        await fetch(`${API_URL}/solicitudes/${id}/avanzar`, { method: 'PUT' });
+        cargarSolicitudes();
+    }
+</script>
+</body>
+</html>
